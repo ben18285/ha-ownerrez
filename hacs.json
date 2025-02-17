@@ -2,5 +2,7 @@
   "name": "Home Assistant - OwnerRez Integration",
   "content_in_root": false,
   "domains": ["ownerrez"],
-  "country": "US"
+  "country": "US",
+  "homeassistant": "2021.6.0",
+  "render_readme": true
 }
