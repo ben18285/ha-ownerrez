@@ -1,0 +1,6 @@
+{
+  "name": "Home Assistant - OwnerRez Integration",
+  "content_in_root": false,
+  "domains": ["ownerrez"],
+  "country": "US"
+}

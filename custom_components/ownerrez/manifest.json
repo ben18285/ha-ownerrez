@@ -1,0 +1,9 @@
+{
+    "domain": "ownerrez",
+    "name": "OwnerRez Integration",
+    "version": "1.0.0",
+    "documentation": "https://github.com/YOUR_GITHUB_REPO",
+    "dependencies": [],
+    "codeowners": ["@yourgithubusername"],
+    "requirements": []
+}
