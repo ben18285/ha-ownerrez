@@ -18,4 +18,4 @@ ownerrez:
 - You can automate dashboard resets or other actions based on this sensor.
 
 ## License
-MIT
+GPL-3.0

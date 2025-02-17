@@ -1,9 +1,9 @@
 {
     "domain": "ownerrez",
     "name": "OwnerRez Integration",
-    "version": "1.0.0",
-    "documentation": "https://github.com/YOUR_GITHUB_REPO",
+    "version": "1.0.1",
+    "documentation": "https://github.com/ben18285/ha-ownerrez",
     "dependencies": [],
-    "codeowners": ["@yourgithubusername"],
+    "codeowners": ["@ben18285"],
     "requirements": []
 }
