@@ -6,4 +6,5 @@
     "dependencies": [],
     "codeowners": ["@ben18285"],
     "requirements": []
+	"config_flow": true
 }
