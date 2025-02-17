@@ -16,7 +16,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
     async_add_entities([OwnerRezCheckOutSensor(hass, api_key)], True)
 
 class OwnerRezCheckOutSensor(SensorEntity):
-    """Sensor for displaying the next OwnerRez check-out date."""
+    """Sensor for displaying the next OwnerRez Check-out Date."""
 
     def __init__(self, hass, api_key):
         self.hass = hass
@@ -24,6 +24,7 @@ class OwnerRezCheckOutSensor(SensorEntity):
         self._attr_name = "OwnerRez Check-out Date"
         self._attr_unique_id = "ownerrez_check_out_date"
         self._state = None
+        _LOGGER.debug("✅ OwnerRez Sensor Initialized Successfully!")
 
     async def async_update(self):
         """Fetch new state data for the sensor."""
@@ -32,15 +33,14 @@ class OwnerRezCheckOutSensor(SensorEntity):
             "Accept": "application/json"
         }
         params = {
-            "include_guest": "true"  # Fetch guest details
+            "include_guest": "true"
         }
         try:
             response = requests.get(CONF_API_URL, headers=headers, params=params)
-            response.raise_for_status()  # Raise an error for failed requests
+            response.raise_for_status()
             data = response.json()
 
             if data and isinstance(data, list):
-                # Sort bookings by departure date
                 sorted_bookings = sorted(data, key=lambda x: x.get("depart_date"))
                 if sorted_bookings:
                     self._state = sorted_bookings[0]["depart_date"]
@@ -57,4 +57,16 @@ class OwnerRezCheckOutSensor(SensorEntity):
             self._state = "Error"
 
     @property
-    
+    def state(self):
+        """Return the state of the sensor."""
+        return self._state
+
+    @property
+    def unique_id(self):
+        """Return a unique ID for the sensor."""
+        return self._attr_unique_id
+
+    @property
+    def name(self):
+        """Return the name of the sensor."""
+        return self._attr_name
