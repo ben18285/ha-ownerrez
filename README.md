@@ -1,15 +1,15 @@
 # Home Assistant - OwnerRez Integration
 
 ## Overview
-This custom component integrates OwnerRez reservation data into Home Assistant, providing real-time check-out dates.
+This custom component integrates OwnerRez reservation data into Home Assistant, providing the following data:
+- real-time check-out dates: sensor `sensor.ownerrez_check_out_date`
 
 ## Installation
 1. Copy the `custom_components/ownerrez/` folder into your Home Assistant setup.
 2. Restart Home Assistant.
 
 ## Configuration
-- This integration **no longer uses YAML configuration**.
-- Instead, go to **Settings > Devices & Services** in Home Assistant.
+- Go to **Settings > Devices & Services** in Home Assistant.
 - Click **Add Integration** and search for **OwnerRez**.
 - Enter your **OwnerRez API Key** when prompted.
 

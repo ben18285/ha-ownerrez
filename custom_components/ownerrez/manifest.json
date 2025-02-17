@@ -1,10 +1,10 @@
 {
     "domain": "ownerrez",
     "name": "OwnerRez Integration",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "documentation": "https://github.com/ben18285/ha-ownerrez",
     "dependencies": [],
     "codeowners": ["@ben18285"],
-    "requirements": [],
-	"config_flow": true
+    "requirements": ["requests"],
+    "config_flow": true
 }
