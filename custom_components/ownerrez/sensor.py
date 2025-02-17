@@ -1,5 +1,6 @@
 import logging
-import requests
+import aiohttp
+import asyncio
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
@@ -27,7 +28,7 @@ class OwnerRezCheckOutSensor(SensorEntity):
         _LOGGER.debug("✅ OwnerRez Sensor Initialized Successfully!")
 
     async def async_update(self):
-        """Fetch new state data for the sensor."""
+        """Fetch new state data for the sensor using async HTTP request."""
         headers = {
             "Authorization": f"Bearer {self._api_key}",
             "Accept": "application/json"
@@ -35,26 +36,28 @@ class OwnerRezCheckOutSensor(SensorEntity):
         params = {
             "include_guest": "true"
         }
-        try:
-            response = requests.get(CONF_API_URL, headers=headers, params=params)
-            response.raise_for_status()
-            data = response.json()
 
-            if data and isinstance(data, list):
-                sorted_bookings = sorted(data, key=lambda x: x.get("depart_date"))
-                if sorted_bookings:
-                    self._state = sorted_bookings[0]["depart_date"]
-                else:
-                    self._state = "No upcoming check-outs"
-            else:
-                self._state = "No upcoming check-outs"
+        async with aiohttp.ClientSession() as session:
+            try:
+                async with session.get(CONF_API_URL, headers=headers, params=params) as response:
+                    response.raise_for_status()
+                    data = await response.json()
 
-        except requests.exceptions.HTTPError as http_err:
-            _LOGGER.error(f"HTTP error occurred: {http_err}")
-            self._state = "Error"
-        except Exception as err:
-            _LOGGER.error(f"Other error occurred: {err}")
-            self._state = "Error"
+                    if data and isinstance(data, list):
+                        sorted_bookings = sorted(data, key=lambda x: x.get("depart_date"))
+                        if sorted_bookings:
+                            self._state = sorted_bookings[0]["depart_date"]
+                        else:
+                            self._state = "No upcoming check-outs"
+                    else:
+                        self._state = "No upcoming check-outs"
+
+            except aiohttp.ClientResponseError as http_err:
+                _LOGGER.error(f"❌ HTTP error occurred: {http_err}")
+                self._state = "Error"
+            except Exception as err:
+                _LOGGER.error(f"❌ Other error occurred: {err}")
+                self._state = "Error"
 
     @property
     def state(self):

@@ -1,10 +1,12 @@
 {
     "domain": "ownerrez",
-    "name": "OwnerRez Integration",
-    "version": "1.0.2",
+    "name": "OwnerRez Data Import",
+    "version": "1.0.4",
     "documentation": "https://github.com/ben18285/ha-ownerrez",
     "dependencies": [],
     "codeowners": ["@ben18285"],
     "requirements": ["requests"],
-    "config_flow": true
+    "config_flow": true,
+    "integration_type": "hub",
+    "iot_class": "cloud_polling"
 }
