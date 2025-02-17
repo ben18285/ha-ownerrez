@@ -3,8 +3,6 @@ import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.typing import ConfigType
-from homeassistant.data_entry_flow import FlowResult
-
 from .const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
@@ -12,7 +10,7 @@ _LOGGER = logging.getLogger(__name__)
 class OwnerRezConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     """Handle a config flow for OwnerRez integration."""
 
-    async def async_step_user(self, user_input=None) -> FlowResult:
+    async def async_step_user(self, user_input=None):
         """Handle the initial step."""
         errors = {}
         if user_input is not None:
