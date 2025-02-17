@@ -8,7 +8,7 @@ from .const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
-CONF_API_URL = "https://api.ownerreservations.com/v1/reservations?status=booked"
+CONF_API_URL = "https://api.ownerreservations.com/v2/bookings"
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback):
     """Set up the OwnerRez sensor from a config entry."""
@@ -27,22 +27,34 @@ class OwnerRezCheckOutSensor(SensorEntity):
 
     async def async_update(self):
         """Fetch new state data for the sensor."""
-        headers = {"Authorization": f"Bearer {self._api_key}", "Accept": "application/json"}
+        headers = {
+            "Authorization": f"Bearer {self._api_key}",
+            "Accept": "application/json"
+        }
+        params = {
+            "include_guest": "true"  # Fetch guest details
+        }
         try:
-            response = requests.get(CONF_API_URL, headers=headers)
+            response = requests.get(CONF_API_URL, headers=headers, params=params)
+            response.raise_for_status()  # Raise an error for failed requests
             data = response.json()
-            if "reservations" in data and len(data["reservations"]) > 0:
-                self._state = data["reservations"][0]["depart_date"]
+
+            if data and isinstance(data, list):
+                # Sort bookings by departure date
+                sorted_bookings = sorted(data, key=lambda x: x.get("depart_date"))
+                if sorted_bookings:
+                    self._state = sorted_bookings[0]["depart_date"]
+                else:
+                    self._state = "No upcoming check-outs"
             else:
                 self._state = "No upcoming check-outs"
-        except Exception as e:
-            _LOGGER.error(f"Error fetching OwnerRez data: {e}")
+
+        except requests.exceptions.HTTPError as http_err:
+            _LOGGER.error(f"HTTP error occurred: {http_err}")
+            self._state = "Error"
+        except Exception as err:
+            _LOGGER.error(f"Other error occurred: {err}")
             self._state = "Error"
 
     @property
-    def state(self):
-        return self._state
-
-    @property
-    def unique_id(self):
-        return "ownerrez_check_out_date"
+    
